@@ -1,0 +1,6 @@
+flutter_icons:
+  android: true
+  ios: true
+  # image_path: "assets/app_icon/dev.jpg"
+  image_path_android: "assets/app_icon/android_dev.png"
+  image_path_ios: "assets/app_icon/ios_dev.png"
