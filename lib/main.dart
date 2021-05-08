@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 import 'app_config.dart';
@@ -6,6 +8,8 @@ Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await AppConfig().load();
+
+  await Firebase.initializeApp();
 
   runApp(MyApp());
 }
@@ -92,6 +96,25 @@ class _MyHomePageState extends State<MyHomePage> {
             Text(
               AppConfig.API_URI,
               style: TextStyle(fontSize: 30),
+            ),
+            StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+              stream:
+                  FirebaseFirestore.instance.collection('secrets').snapshots(),
+              builder: (_, snapshot) {
+                if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                  return CircularProgressIndicator();
+                }
+
+                final first = snapshot.data!.docs.first.data();
+                return Text(
+                  'Firebase: ' + first['value'],
+                  style: TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.blue,
+                  ),
+                );
+              },
             ),
           ],
         ),
